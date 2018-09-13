@@ -2,6 +2,8 @@
   "extends": "tslint:recommended",
   "rules": {
 	"no-consecutive-blank-lines": false,
+    "prefer-for-of": false,
+    "ordered-imports": false,
     "no-console": [false, "log", "error"],
 	"no-trailing-whitespace": false,
     "quotemark": [true, "single", "avoid-escape"],

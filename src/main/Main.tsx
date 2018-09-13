@@ -1,6 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import Indexer from './Indexer';
 import Tokenizer from './Tokenizer';
+import Segment from './Index';
 
 ReactDOM.render(
     <div>
@@ -9,5 +11,16 @@ ReactDOM.render(
     document.getElementById('main'),
 );
 
-let tokenizer : Tokenizer = new Tokenizer();
-console.log(tokenizer.tokenize('test', 'testtt wpwpw hot@test.com'));
+let indexer : Indexer = new Indexer();
+
+let document1 = 'The rabbit jumped over the fox';
+let document2 = 'Hello world';
+let document3 = 'The Fox ate all the rabbit';
+
+let index1 : Segment = indexer.create(document1);
+let index2 : Segment = indexer.create(document3);
+let mergedIndex = indexer.merge(index2, index1);
+console.log(mergedIndex);
+console.log('Result');
+console.log(mergedIndex.search('fox rabbit'));
+

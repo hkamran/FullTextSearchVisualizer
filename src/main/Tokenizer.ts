@@ -2,26 +2,22 @@ import Token from './beans/Token';
 
 export default class Tokenizer {
 
-    public tokenize(docId: string, content : string) : Token[] {
+    public tokenize(content : string) : string[] {
         let rawTokens: string[] = content.split(/[^A-Za-z]/);
-        let map: Map<string, Token> = new Map();
+        let tokenSet : Set<string> = new Set();
         rawTokens.forEach((rawToken) => {
-            let token = new Token();
-            token.val = rawToken;
-            token.freq++;
-            if (map.has(token.val)) {
-                map.get(token.val).freq++;
-            } else {
-                map.set(token.val, token);
+            if (!tokenSet.has(rawToken)) {
+                tokenSet.add(rawToken.toLowerCase());
             }
         });
 
-        let tokens : Token[] = [] as any;
-        map.forEach((val, key) => {
+        let tokens : string[] = [] as any;
+        tokenSet.forEach((val) => {
            tokens.push(val);
         });
+
+
         return tokens;
     }
-
 
 }
