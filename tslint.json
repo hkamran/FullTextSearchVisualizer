@@ -8,6 +8,7 @@
 	"no-trailing-whitespace": false,
     "quotemark": [true, "single", "avoid-escape"],
     "prefer-const": false,
+    "member-ordering": [false, {"order": "fields-first"}],
 	"typedef-whitespace": [
       false,
       {},
