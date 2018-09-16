@@ -17,7 +17,7 @@ tsPipeline.registerBuildGulpTasks(
     gulp,
     {
         entryPoints: {
-            'app': __dirname + '/src/main/main.tsx'
+            'app': __dirname + '/src/main/web/Main.tsx'
         },
         outputDir: __dirname + '/target',
         tsLintFile: ts
