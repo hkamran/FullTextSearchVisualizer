@@ -6,7 +6,7 @@ import {Log, Level} from 'typescript-logger/build/index';
 class CoreStore extends Event {
 
     public documents : Document[] = [] as any;
-    public LOGGER = Log.create('CoreStore');
+    public log = Log.create('CoreStore');
 
     constructor() {
         super();
@@ -23,12 +23,12 @@ class CoreStore extends Event {
     public handleAction(action) {
         switch (action.type) {
             default:
-                this.LOGGER.info('handleAction', action);
+                this.log.info('handleAction', action);
         }
     }
 
     public register() {
-        console.log('Registered Core Store');
+        this.log.info('register');
         CoreStoreDispatcher.register(coreStore.handleAction.bind(coreStore));
     }
 
