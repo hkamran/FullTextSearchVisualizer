@@ -1,8 +1,12 @@
 import { Event } from 'typescript.events';
 import CoreStoreDispatcher from './CoreStoreDispatcher';
 import {ReduceStore} from 'flux/utils';
+import {Log, Level} from 'typescript-logger/build/index';
 
 class CoreStore extends Event {
+
+    public documents : Document[] = [] as any;
+    public LOGGER = Log.create('CoreStore');
 
     constructor() {
         super();
@@ -19,7 +23,7 @@ class CoreStore extends Event {
     public handleAction(action) {
         switch (action.type) {
             default:
-                console.log(action);
+                this.LOGGER.info('handleAction', action);
         }
     }
 

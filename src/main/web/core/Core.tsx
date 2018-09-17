@@ -6,10 +6,12 @@ import Body from './layout/Body';
 import Footer from './layout/Footer';
 import Header from './layout/Header';
 import Navigation from './layout/Navigation';
-
 import CoreStore from './stores/core/CoreStore';
 
 import HomeScene from '../home/HomeScene';
+
+import 'bootstrap/dist/css/bootstrap.css';
+
 
 export default class App extends React.Component<any, any> {
 
@@ -23,7 +25,7 @@ export default class App extends React.Component<any, any> {
 
     public render() {
         return (
-            <div>
+            <main role='main' className='inner cover'>
                 <Header />
                 <Navigation />
                 <Body>
@@ -32,7 +34,7 @@ export default class App extends React.Component<any, any> {
                     </Router>
                 </Body>
                 <Footer />
-            </div>
+            </main>
         );
     }
 }
