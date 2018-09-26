@@ -10,6 +10,7 @@ import Navigation from './layout/Navigation';
 import CoreStore from './stores/core/CoreStore';
 
 import HomeScene from '../home/HomeScene';
+import DocumentScene from '../document/DocumentScene';
 import 'bootstrap/dist/css/bootstrap.css';
 
 
@@ -32,7 +33,7 @@ export default class Core extends React.Component<any, any> {
                 <Navigation />
                 <Body>
                     <Router>
-                        <Route exact path='/' component={HomeScene} />
+                        <Route exact path='/' component={DocumentScene} />
                     </Router>
                 </Body>
                 <Footer />

@@ -14,4 +14,5 @@ class CoreStoreActions {
     }
 }
 
+export const Types = CoreStoreActions.types;
 export default new CoreStoreActions();

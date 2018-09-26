@@ -8,6 +8,10 @@ export default class Index {
     public static tokenizer: Tokenizer = new Tokenizer();
     public segment : Segment;
 
+    constructor() {
+        this.segment = new Segment();
+    }
+
     public static create(document : Document) : Index {
         let tokens: string[]  = this.tokenizer.tokenize(document.content);
         let segment: Segment = Segment.create(tokens, document);
