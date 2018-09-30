@@ -9,17 +9,11 @@ export default class Navigation extends React.Component<any, any> {
         super(props);
     }
 
-    public test() {
-        CoreStoreActions.setHeader('test');
-    }
 
     public render() {
         return (
             <div>
                 Navigation
-
-                <a onClick={this.test}>yolo</a>
-
             </div>
         );
     }

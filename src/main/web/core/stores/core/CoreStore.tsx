@@ -30,14 +30,27 @@ class CoreStore extends Event {
         this.emit('change');
     }
 
-    public getDocuments() {
-        return this.index.segment.documents;
+    public deleteDocument(docId : number) {
+        this.index.delete(docId);
+        this.log.info('handleAction', 'Deleted doc ' + docId);
+        this.emit('change');
+    }
+
+    public getDocuments() : Document[] {
+        return this.index.documents;
+    }
+
+    public getIndex() : Index {
+        return this.index;
     }
 
     public handleAction(action) {
         switch (action.type) {
-            case Types.SET_HEADER:
+            case Types.ADD_DOCUMENT:
                 this.addDocument(action.data);
+                break;
+            case Types.DELETE_DOCUMENT:
+                this.deleteDocument(action.data);
                 break;
             default:
                 this.log.info('handleAction', action);

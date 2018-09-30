@@ -3,13 +3,21 @@ import CoreStoreDispatcher from './CoreStoreDispatcher';
 class CoreStoreActions {
 
     public static types = {
-        SET_HEADER : 'SET_HEADER',
+        ADD_DOCUMENT : 'ADD_DOCUMENT',
+        DELETE_DOCUMENT : 'DELETE_DOCUMENT',
     } as any;
 
-    public setHeader(content : string) {
+    public addDocument(content : string) {
         CoreStoreDispatcher.dispatch({
             data: content,
-            type: CoreStoreActions.types.SET_HEADER,
+            type: CoreStoreActions.types.ADD_DOCUMENT,
+        });
+    }
+
+    public deleteDocument(docId : number) {
+        CoreStoreDispatcher.dispatch({
+            data: docId,
+            type: CoreStoreActions.types.DELETE_DOCUMENT,
         });
     }
 }

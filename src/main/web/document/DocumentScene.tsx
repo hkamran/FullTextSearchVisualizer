@@ -20,7 +20,6 @@ export default class DocumentScene extends React.Component<any, any> {
     }
 
     public componentWillMount() {
-        let doc1 : Document = Document.build('test');
         CoreStore.addChangeListener(this.onChangeListener.bind(this));
     }
 
@@ -35,17 +34,25 @@ export default class DocumentScene extends React.Component<any, any> {
     }
 
     public addDocument() : void {
-        CoreStoreActions.setHeader('testasdasd');
+        CoreStoreActions.addDocument('test asdasd');
+    }
+
+    public deleteDocument(key : number) : void {
+        CoreStoreActions.deleteDocument(key);
     }
 
     public render() {
 
         let documents = [] as any;
         this.state.documents.forEach((value, key) => {
-            documents.push(<div key={key}>{value.content}</div>);
+            documents.push(
+                <div key={key}>{value.content}
+                    <button style={{display: 'inline'}} onClick={this.deleteDocument.bind(this, key)} >X</button>
+                </div>);
         });
         return (
             <div>
+                <h1>Documents</h1>
                 <button onClick={this.addDocument}>ADD Document</button>
                 {documents}
             </div>

@@ -1,8 +1,10 @@
+import ArraysUtil from './ArraysUtil';
+
 export default class Posting {
     public docList : number[] = [] as any;
 
-    public add(docId : number) {
-        this.docList.push(docId);
+    public push(docId : number) {
+        this.docList.push(Number(docId));
     }
 
     public increment(num : number) {
@@ -21,6 +23,44 @@ export default class Posting {
         }
     }
 
+    public remove(set : Set<number>) : void {
+        let counter = 0;
+        let newDocList = [] as any;
+        for (let i = 0; i < this.docList.length; i++) {
+            let docId : number = Number(this.docList[i]);
+            if (!set.has(docId)) {
+                newDocList.push(docId - counter);
+            } else {
+                counter++;
+            }
+        }
+        this.docList = newDocList;
+    }
+
+    public clone() : Posting {
+        let docIds = [] as any;
+        for (let docId in this.docList) {
+            docIds.push(docId);
+        }
+        let posting : Posting = new Posting();
+        posting.docList = docIds;
+        return posting;
+    }
+
+    public static merge(segmentA : Posting, segmentB : Posting) : Posting {
+        let segment = new Posting();
+        let docList = ArraysUtil.merge(segmentA.docList, segmentB.docList, true, (aNum, bNum) => {
+            if (aNum - bNum < 0) {
+                return 1;
+            } else if (aNum - bNum > 0) {
+                return -1;
+            }
+            return 0;
+        });
+        segment.docList = docList;
+        return segment;
+    }
+
     public intersection(toPosting : Posting) : Posting {
         let result : Posting = new Posting();
 
@@ -36,7 +76,7 @@ export default class Posting {
             } else if (toId > thisId) {
                 thisIndex++;
             } else {
-                result.add(toId);
+                result.push(toId);
                 toIndex++;
                 thisIndex++;
             }
@@ -57,10 +97,10 @@ export default class Posting {
             let thisId = this.docList[thisIndex];
 
             if (toId < thisId) {
-                result.add(toId);
+                result.push(toId);
                 toIndex++;
             } else if (toId > thisId) {
-                result.add(thisId);
+                result.push(thisId);
                 thisIndex++;
             } else {
                 toIndex++;

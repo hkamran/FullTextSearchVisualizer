@@ -1,31 +1,17 @@
 import Document from './beans/Document';
 import Token from './beans/Token';
 import Tokenizer from './Tokenizer';
-import Segment from './Segment';
 import Posting from './Posting';
+import ArraysUtil from './ArraysUtil';
+import {number} from 'prop-types';
 
 export default class Index {
     public static tokenizer: Tokenizer = new Tokenizer();
-    public segment : Segment;
 
-    constructor() {
-        this.segment = new Segment();
-    }
-
-    public static create(document : Document) : Index {
-        let tokens: string[]  = this.tokenizer.tokenize(document.content);
-        let segment: Segment = Segment.create(tokens, document);
-
-        let index : Index = new Index();
-        index.segment = segment;
-        return index;
-    }
-
-    public static merge(a : Index, b : Index) : Index {
-        let index : Index = new Index();
-        index.segment = Segment.merge(a.segment, b.segment);
-        return index;
-    }
+    public deleted : Set<number> = new Set<number>();
+    public documents : Document[] = [] as any;
+    public postings : Map<string, Posting> = new Map<string, Posting>();
+    public tokens : string[] = [] as any;
 
     public search(query : string) : Document[] {
         let tokenizer : Tokenizer = new Tokenizer();
@@ -35,7 +21,7 @@ export default class Index {
 
         let postings : Posting[] = [] as any;
         tokens.forEach((token) => {
-            let posting : Posting  = this.segment.getPosting(token);
+            let posting : Posting  = this.postings.get(token);
             postings.push(posting);
         });
 
@@ -53,10 +39,89 @@ export default class Index {
         }
 
         matched.docList.forEach((docId) => {
-           result.push(this.segment.documents[docId]);
+           result.push(this.documents[docId]);
         });
 
         return result;
+    }
+
+    public delete(docId : number) {
+        this.deleted.add(docId);
+    }
+
+    public static create(document : Document) : Index {
+        let tokens: string[]  = this.tokenizer.tokenize(document.content);
+        let index : Index = new Index();
+
+        let docIndex = index.documents.length;
+
+        for (let id in tokens) {
+            let token = tokens[id];
+            let posting : Posting = new Posting();
+            posting.push(docIndex);
+            index.postings.set(token, posting);
+        }
+
+        index.documents.push(document);
+        index.tokens = tokens;
+
+        return index;
+    }
+
+    public static merge(a : Index, b : Index) : Index {
+        let index : Index = new Index();
+        let docSize = a.documents.length - a.deleted.size;
+
+        let tokens : string[] = ArraysUtil.merge(a.tokens,
+            b.tokens,
+            false,
+            (aElement : string, bElement : string) => {
+                return ('' + aElement).localeCompare(bElement);
+            });
+
+        for (let id in tokens) {
+            let token = tokens[id];
+            let postingA : Posting = a.postings.get(token);
+            let postingB : Posting = b.postings.get(token);
+
+            if (postingA) {
+                postingA = postingA.clone();
+                postingA.remove(a.deleted);
+            }
+
+            if (postingB) {
+                postingB = postingB.clone();
+                postingB.remove(b.deleted);
+                postingB.increment(docSize);
+            }
+
+            let result : Posting = null;
+            if (postingA != null && postingB != null) {
+                result = Posting.merge(postingA, postingB);
+            } else if (postingA != null) {
+                result = postingA;
+            } else if (postingB != null) {
+                result = postingB;
+            }
+
+            if (result.size() > 0) {
+                index.postings.set(token, result);
+            }
+        }
+
+        index.tokens = tokens;
+
+        for (let i = 0; i < a.documents.length; i++) {
+            if (!a.deleted.has(i)) {
+                index.documents.push(a.documents[i]);
+            }
+        }
+        for (let i = 0; i < b.documents.length; i++) {
+            if (!b.deleted.has(i)) {
+                index.documents.push(b.documents[i]);
+            }
+        }
+        return index;
     }
 
 }

@@ -11,8 +11,8 @@ import CoreStore from './stores/core/CoreStore';
 
 import HomeScene from '../home/HomeScene';
 import DocumentScene from '../document/DocumentScene';
+import IndexScene from '../index/IndexScene';
 import 'bootstrap/dist/css/bootstrap.css';
-
 
 export default class Core extends React.Component<any, any> {
 
@@ -32,9 +32,8 @@ export default class Core extends React.Component<any, any> {
                 <Header />
                 <Navigation />
                 <Body>
-                    <Router>
-                        <Route exact path='/' component={DocumentScene} />
-                    </Router>
+                    <DocumentScene />
+                    <IndexScene />
                 </Body>
                 <Footer />
             </main>
