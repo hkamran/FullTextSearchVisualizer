@@ -34,10 +34,11 @@ export default class IndexScene extends React.Component<any, any> {
         });
     }
 
-    public render() {
+    public rebuildIndex() {
+        CoreStoreActions.rebuild();
+    }
 
-        console.log('posting');
-        console.log(this.state.index.postings);
+    public render() {
         let tokens = [] as any;
         this.state.index.tokens.forEach((value, key) => {
             let posting : Posting = this.state.index.postings.get(value);
@@ -45,7 +46,6 @@ export default class IndexScene extends React.Component<any, any> {
             let docElement = [];
             for (let id in docIds) {
                 let docId = docIds[id];
-                console.log(docId);
                 docElement.push(Number(docId).toString() + ',');
             }
 
@@ -54,7 +54,7 @@ export default class IndexScene extends React.Component<any, any> {
         return (
             <div>
                 <h1>Index</h1>
-                <button>rebuild</button>
+                <button onClick={this.rebuildIndex}>rebuild</button>
                 {tokens}
             </div>
         );

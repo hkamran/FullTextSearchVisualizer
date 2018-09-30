@@ -4,6 +4,7 @@ import CoreStore from './../core/stores/core/CoreStore';
 import CoreStoreActions from './../core/stores/core/CoreStoreActions';
 import Document from './../../app/beans/Document';
 import {Log, Level} from 'typescript-logger/build/index';
+import * as loremIpsum from 'lorem-ipsum';
 
 export default class DocumentScene extends React.Component<any, any> {
 
@@ -15,7 +16,8 @@ export default class DocumentScene extends React.Component<any, any> {
         super(props);
 
         this.state = {
-           documents : CoreStore.getDocuments(),
+            count : 0,
+            documents : CoreStore.getDocuments(),
         };
     }
 
@@ -34,7 +36,15 @@ export default class DocumentScene extends React.Component<any, any> {
     }
 
     public addDocument() : void {
-        CoreStoreActions.addDocument('test asdasd');
+        let content : string = loremIpsum({count : 1});
+        // let content : string = '';
+        // if (this.state.count % 2 === 0) {
+        //     content = 'test run kik';
+        // } else {
+        //     content = 'wow zers kik';
+        // }
+        this.setState({count : this.state.count + 1});
+        CoreStoreActions.addDocument(content);
     }
 
     public deleteDocument(key : number) : void {
@@ -53,7 +63,7 @@ export default class DocumentScene extends React.Component<any, any> {
         return (
             <div>
                 <h1>Documents</h1>
-                <button onClick={this.addDocument}>ADD Document</button>
+                <button onClick={this.addDocument.bind(this)}>ADD Document</button>
                 {documents}
             </div>
         );

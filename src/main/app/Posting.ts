@@ -24,14 +24,25 @@ export default class Posting {
     }
 
     public remove(set : Set<number>) : void {
-        let counter = 0;
         let newDocList = [] as any;
-        for (let i = 0; i < this.docList.length; i++) {
+
+        let j = 0;
+        let i = 0;
+        let counter = 0;
+        while (i < this.docList.length) {
             let docId : number = Number(this.docList[i]);
-            if (!set.has(docId)) {
+
+            if (!set.has(j) && j === docId) {
                 newDocList.push(docId - counter);
-            } else {
+            } else if (set.has(j)) {
                 counter++;
+            }
+
+            if (j < docId) {
+                j++;
+            } else {
+                j++;
+                i++;
             }
         }
         this.docList = newDocList;
@@ -39,7 +50,8 @@ export default class Posting {
 
     public clone() : Posting {
         let docIds = [] as any;
-        for (let docId in this.docList) {
+        for (let i in this.docList) {
+            let docId = this.docList[i];
             docIds.push(docId);
         }
         let posting : Posting = new Posting();
@@ -50,12 +62,8 @@ export default class Posting {
     public static merge(segmentA : Posting, segmentB : Posting) : Posting {
         let segment = new Posting();
         let docList = ArraysUtil.merge(segmentA.docList, segmentB.docList, true, (aNum, bNum) => {
-            if (aNum - bNum < 0) {
-                return 1;
-            } else if (aNum - bNum > 0) {
-                return -1;
-            }
-            return 0;
+            let diff : number = Number(aNum) - Number(bNum);
+            return Number(diff);
         });
         segment.docList = docList;
         return segment;

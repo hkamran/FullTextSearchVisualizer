@@ -18,12 +18,12 @@ export default class ArraysUtil {
             let bElement : T = bList[bIndex];
 
             let comparison = comparator(aElement, bElement);
-            if (comparison === 1) {
-                result.push(aElement);
-                aIndex++;
-            } else if (comparison === -1) {
+            if (comparison > 0) {
                 result.push(bElement);
                 bIndex++;
+            } else if (comparison < 0) {
+                result.push(aElement);
+                aIndex++;
             } else {
                 if (dups) {
                     result.push(aElement);

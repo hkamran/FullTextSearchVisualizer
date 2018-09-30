@@ -5,6 +5,7 @@ class CoreStoreActions {
     public static types = {
         ADD_DOCUMENT : 'ADD_DOCUMENT',
         DELETE_DOCUMENT : 'DELETE_DOCUMENT',
+        REBUILD : 'REBUILD',
     } as any;
 
     public addDocument(content : string) {
@@ -18,6 +19,13 @@ class CoreStoreActions {
         CoreStoreDispatcher.dispatch({
             data: docId,
             type: CoreStoreActions.types.DELETE_DOCUMENT,
+        });
+    }
+
+    public rebuild() {
+        CoreStoreDispatcher.dispatch({
+            data: null,
+            type: CoreStoreActions.types.REBUILD,
         });
     }
 }

@@ -44,6 +44,11 @@ class CoreStore extends Event {
         return this.index;
     }
 
+    public rebuild() {
+        this.index = Index.rebuild(this.index);
+        this.emit('change');
+    }
+
     public handleAction(action) {
         switch (action.type) {
             case Types.ADD_DOCUMENT:
@@ -51,6 +56,9 @@ class CoreStore extends Event {
                 break;
             case Types.DELETE_DOCUMENT:
                 this.deleteDocument(action.data);
+                break;
+            case Types.REBUILD:
+                this.rebuild();
                 break;
             default:
                 this.log.info('handleAction', action);
