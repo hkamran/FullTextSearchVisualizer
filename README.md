@@ -12,3 +12,4 @@ A small project to showcase how full text search works, and the components that 
 
 ## Notes
 
+Made from the ground up mirroring what lucene/elastic does in a primitive way.
