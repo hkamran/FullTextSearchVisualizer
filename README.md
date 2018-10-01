@@ -8,7 +8,7 @@ A small project to showcase how full text search works, and the components that 
 
 ## Requirements
 	
-- Modern Browsers ONLY (Preference to Firefox)
+- Modern Browsers
 
 ## Notes
 
