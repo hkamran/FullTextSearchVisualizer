@@ -1,4 +1,5 @@
 import CoreStoreDispatcher from './CoreStoreDispatcher';
+import {SearchResult} from '../../../../app/Search';
 
 class CoreStoreActions {
 
@@ -6,6 +7,7 @@ class CoreStoreActions {
         ADD_DOCUMENT : 'ADD_DOCUMENT',
         DELETE_DOCUMENT : 'DELETE_DOCUMENT',
         REBUILD : 'REBUILD',
+        SEARCH : 'SEARCH',
     } as any;
 
     public addDocument(content : string) {
@@ -26,6 +28,13 @@ class CoreStoreActions {
         CoreStoreDispatcher.dispatch({
             data: null,
             type: CoreStoreActions.types.REBUILD,
+        });
+    }
+
+    public search(query : string) {
+        CoreStoreDispatcher.dispatch({
+            data: query,
+            type: CoreStoreActions.types.SEARCH,
         });
     }
 }

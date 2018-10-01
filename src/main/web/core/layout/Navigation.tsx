@@ -13,7 +13,6 @@ export default class Navigation extends React.Component<any, any> {
     public render() {
         return (
             <div>
-                Navigation
             </div>
         );
     }

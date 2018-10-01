@@ -5,11 +5,13 @@ import {Log, Level} from 'typescript-logger/build/index';
 import Document from './../../../../app/beans/Document';
 import CoreStoreActions, {Types} from './CoreStoreActions';
 import Index from './../../../../app/Index';
+import {SearchResult} from './../../../../app/Search';
 
 class CoreStore extends Event {
 
     public log = Log.create('CoreStore');
     public index : Index = new Index();
+    public result : SearchResult = new SearchResult();
 
     constructor() {
         super();
@@ -44,6 +46,17 @@ class CoreStore extends Event {
         return this.index;
     }
 
+    public search(query : string) : void {
+        let result : SearchResult = this.index.search(query);
+        this.result = result;
+        this.log.info('setSearchResult', result);
+        this.emit('change');
+    }
+
+    public getSearchResult() : SearchResult {
+        return this.result;
+    }
+
     public rebuild() {
         this.index = Index.rebuild(this.index);
         this.emit('change');
@@ -59,6 +72,9 @@ class CoreStore extends Event {
                 break;
             case Types.REBUILD:
                 this.rebuild();
+                break;
+            case Types.SEARCH:
+                this.search(action.data);
                 break;
             default:
                 this.log.info('handleAction', action);

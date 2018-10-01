@@ -1,0 +1,59 @@
+body {
+    margin: 20px;
+}
+
+.posting {
+    margin: 5px;
+    border: 1px solid #000;
+    padding: 5px;
+}
+
+.posting.highlight {
+    background-color: #fff61a;
+}
+
+.document.highlight {
+    background-color: #fff61a;
+}
+
+.token {
+    margin: 5px;
+    border: 1px solid #000;
+    padding: 5px;
+}
+
+.token.highlight {
+    background-color: #fff61a;
+}
+
+.search-row {
+    height: 32px;
+}
+
+.box legend {
+    margin-bottom: 0px;
+    width: auto;
+    border-bottom: 0px;
+}
+
+.box fieldset {
+    border: 1px solid #000000;
+    margin: 0px;
+    padding: 10px;
+
+}
+
+.box .menu {
+    float: right;
+    margin-bottom: 15px;
+    margin-top: -45px;
+    border: 1px solid #000;
+    padding: 7px;
+    border-radius: 2px;
+    background: #fff;
+}
+
+.box {
+    min-height: 50px;
+    margin-bottom: 20px;
+}

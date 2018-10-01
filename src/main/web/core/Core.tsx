@@ -12,7 +12,10 @@ import CoreStore from './stores/core/CoreStore';
 import HomeScene from '../home/HomeScene';
 import DocumentScene from '../document/DocumentScene';
 import IndexScene from '../index/IndexScene';
+import SearchScene from '../search/SearchScene';
+
 import 'bootstrap/dist/css/bootstrap.css';
+import './Core.css';
 
 export default class Core extends React.Component<any, any> {
 
@@ -32,8 +35,15 @@ export default class Core extends React.Component<any, any> {
                 <Header />
                 <Navigation />
                 <Body>
-                    <DocumentScene />
-                    <IndexScene />
+                    <SearchScene/>
+                    <div className='row'>
+                        <div className='col-md-6'>
+                            <DocumentScene />
+                        </div>
+                        <div className='col-md-6'>
+                            <IndexScene />
+                        </div>
+                    </div>
                 </Body>
                 <Footer />
             </main>

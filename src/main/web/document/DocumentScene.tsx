@@ -18,6 +18,7 @@ export default class DocumentScene extends React.Component<any, any> {
         this.state = {
             count : 0,
             documents : CoreStore.getDocuments(),
+            result : CoreStore.getSearchResult(),
         };
     }
 
@@ -32,6 +33,7 @@ export default class DocumentScene extends React.Component<any, any> {
     public onChangeListener() {
         this.setState({
             documents : CoreStore.getDocuments(),
+            result : CoreStore.getSearchResult(),
         });
     }
 
@@ -53,18 +55,27 @@ export default class DocumentScene extends React.Component<any, any> {
 
     public render() {
 
+
         let documents = [] as any;
         this.state.documents.forEach((value, key) => {
             documents.push(
-                <div key={key}>{value.content}
-                    <button style={{display: 'inline'}} onClick={this.deleteDocument.bind(this, key)} >X</button>
+                <div key={key}>
+                    <span style={{marginLeft: '5px'}}>
+                        <button style={{display: 'inline'}} onClick={this.deleteDocument.bind(this, key)} >X</button>
+                    </span>
+                    <span className={this.state.result.matched.includes(key) ? 'document highlight' : ''}
+                          style={{marginLeft: '5px'}}>{value.content}</span>
                 </div>);
         });
         return (
-            <div>
-                <h1>Documents</h1>
-                <button onClick={this.addDocument.bind(this)}>ADD Document</button>
-                {documents}
+            <div className='box'>
+                <fieldset>
+                    <legend>Documents</legend>
+                    <div className='menu'>
+                        <button onClick={this.addDocument.bind(this)}>generate</button>
+                    </div>
+                    {documents}
+                </fieldset>
             </div>
         );
     }

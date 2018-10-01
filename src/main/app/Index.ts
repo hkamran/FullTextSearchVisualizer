@@ -3,6 +3,7 @@ import Token from './beans/Token';
 import Tokenizer from './Tokenizer';
 import Posting from './Posting';
 import ArraysUtil from './ArraysUtil';
+import {Search, SearchResult} from './Search';
 import {number} from 'prop-types';
 
 export default class Index {
@@ -13,36 +14,8 @@ export default class Index {
     public postings : Map<string, Posting> = new Map<string, Posting>();
     public tokens : string[] = [] as any;
 
-    public search(query : string) : Document[] {
-        let tokenizer : Tokenizer = new Tokenizer();
-        let result : Document[] = [] as any;
-
-        let tokens : string[] = tokenizer.tokenize(query);
-
-        let postings : Posting[] = [] as any;
-        tokens.forEach((token) => {
-            let posting : Posting  = this.postings.get(token);
-            postings.push(posting);
-        });
-
-        let matched : Posting = null;
-        for (let posting of postings) {
-            if (matched === null) {
-                matched = posting;
-            } else {
-                matched = posting.intersection(posting);
-            }
-        }
-
-        if (matched == null) {
-            return result;
-        }
-
-        matched.docList.forEach((docId) => {
-           result.push(this.documents[docId]);
-        });
-
-        return result;
+    public search(query : string) : SearchResult {
+        return Search.query(this, query);
     }
 
     public delete(docId : number) {
@@ -59,17 +32,6 @@ export default class Index {
             }
         }
         // Redo tokens
-        let uniqueTokens = new Set<string>();
-        let newTokens = [] as any;
-        for (let i = 0; i < index.tokens.length; i++) {
-            let token = index.tokens[i];
-            if (uniqueTokens.has(token)) {
-                continue;
-            }
-            uniqueTokens.add(token);
-            newTokens.push(token);
-        }
-        result.tokens = newTokens;
         return result;
     }
 

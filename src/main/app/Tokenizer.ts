@@ -13,7 +13,9 @@ export default class Tokenizer {
 
         let tokens : string[] = [] as any;
         tokenSet.forEach((val) => {
-           tokens.push(val);
+            if (val.length > 0) {
+                tokens.push(val);
+            }
         });
 
 

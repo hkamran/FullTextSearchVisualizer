@@ -17,6 +17,7 @@ export default class IndexScene extends React.Component<any, any> {
 
         this.state = {
             index : CoreStore.getIndex(),
+            result : CoreStore.getSearchResult(),
         };
     }
 
@@ -31,6 +32,7 @@ export default class IndexScene extends React.Component<any, any> {
     public onChangeListener() {
         this.setState({
             index : CoreStore.getIndex(),
+            result : CoreStore.getSearchResult(),
         });
     }
 
@@ -43,19 +45,41 @@ export default class IndexScene extends React.Component<any, any> {
         this.state.index.tokens.forEach((value, key) => {
             let posting : Posting = this.state.index.postings.get(value);
             let docIds = posting != null ? posting.docList : [];
-            let docElement = [];
-            for (let id in docIds) {
-                let docId = docIds[id];
-                docElement.push(Number(docId).toString() + ',');
-            }
 
-            tokens.push(<div key={key}>{value} -> {docElement}</div>);
+            let docElement = [];
+            if (this.state.result.details.tokens.has(value)) {
+                for (let id in docIds) {
+                    let docId = docIds[id];
+                    if (this.state.result.matched.includes(docId)) {
+                        docElement.push(<span className='posting highlight'>{Number(docId).toString()}</span>);
+                    } else {
+                        docElement.push(<span className='posting'>{Number(docId).toString()}</span>);
+                    }
+                }
+
+                tokens.push(<div className='search-row' key={key}>
+                    <span className='token highlight'>{value}</span> -> {docElement}
+                </div>);
+            } else {
+                for (let id in docIds) {
+                    let docId = docIds[id];
+                    docElement.push(<span className='posting'>{Number(docId).toString()}</span>);
+                }
+
+                tokens.push(<div className='search-row' key={key}>
+                    <span className='token'>{value}</span> -> <span>{docElement}</span>
+                </div>);
+            }
         });
         return (
-            <div>
-                <h1>Index</h1>
-                <button onClick={this.rebuildIndex}>rebuild</button>
+            <div className='box'>
+                <fieldset>
+                <legend>Index</legend>
+                <div className='menu'>
+                    <button onClick={this.rebuildIndex}>rebuild</button>
+                </div>
                 {tokens}
+                </fieldset>
             </div>
         );
     }
