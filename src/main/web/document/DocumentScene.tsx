@@ -5,6 +5,9 @@ import CoreStoreActions from './../core/stores/core/CoreStoreActions';
 import Document from './../../app/beans/Document';
 import {Log, Level} from 'typescript-logger/build/index';
 import * as loremIpsum from 'lorem-ipsum';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+
+import 'react-tabs/style/react-tabs.css';
 
 export default class DocumentScene extends React.Component<any, any> {
 
@@ -69,13 +72,18 @@ export default class DocumentScene extends React.Component<any, any> {
         });
         return (
             <div className='box'>
-                <fieldset>
-                    <legend>Documents</legend>
-                    <div className='menu'>
-                        <button onClick={this.addDocument.bind(this)}>generate</button>
-                    </div>
-                    {documents}
-                </fieldset>
+                <Tabs>
+                    <TabList>
+                        <Tab>Documents</Tab>
+                    </TabList>
+
+                    <TabPanel>
+                        <div className='menu'>
+                            <button onClick={this.addDocument.bind(this)}>generate</button>
+                        </div>
+                        {documents}
+                    </TabPanel>
+                </Tabs>
             </div>
         );
     }

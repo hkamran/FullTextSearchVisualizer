@@ -1,15 +1,15 @@
 import ArraysUtil from './ArraysUtil';
 
-export default class Posting {
-    public docList : number[] = [] as any;
+export default class Posting<T> {
+    public docList : T[] = [] as any;
 
-    public push(docId : number) {
-        this.docList.push(Number(docId));
+    public push(element : T) {
+        this.docList.push(element);
     }
 
-    public increment(num : number) {
+    public apply(func : (x: T) => T) : void {
         for (let i = 0; i < this.docList.length; i++) {
-            this.docList[i] = this.docList[i] + num;
+            this.docList[i] = func(this.docList[i]);
         }
     }
 
@@ -17,13 +17,13 @@ export default class Posting {
         return this.docList.length;
     }
 
-    public concat(list : Posting) {
+    public concat(list : Posting<T>) {
         for (let document of list.docList) {
             this.docList.push(document);
         }
     }
 
-    public remove(set : Set<number>) : void {
+    public filter(filter : (x: any) => boolean) : void {
         let newDocList = [] as any;
 
         let j = 0;
@@ -32,9 +32,9 @@ export default class Posting {
         while (i < this.docList.length) {
             let docId : number = Number(this.docList[i]);
 
-            if (!set.has(j) && j === docId) {
+            if (!filter(j) && j === docId) {
                 newDocList.push(docId - counter);
-            } else if (set.has(j)) {
+            } else if (filter(j)) {
                 counter++;
             }
 
@@ -48,29 +48,29 @@ export default class Posting {
         this.docList = newDocList;
     }
 
-    public clone() : Posting {
+    public clone() : Posting<T> {
         let docIds = [] as any;
         for (let i in this.docList) {
             let docId = this.docList[i];
             docIds.push(docId);
         }
-        let posting : Posting = new Posting();
+        let posting : Posting<T> = new Posting<T>();
         posting.docList = docIds;
         return posting;
     }
 
-    public static merge(segmentA : Posting, segmentB : Posting) : Posting {
-        let segment = new Posting();
-        let docList = ArraysUtil.merge(segmentA.docList, segmentB.docList, true, (aNum, bNum) => {
+    public merge(segment : Posting<T>) : Posting<T> {
+        let result = new Posting<T>();
+        let docList = ArraysUtil.merge(this.docList, segment.docList, true, (aNum, bNum) => {
             let diff : number = Number(aNum) - Number(bNum);
             return Number(diff);
         });
-        segment.docList = docList;
-        return segment;
+        result.docList = docList;
+        return result;
     }
 
-    public intersection(toPosting : Posting) : Posting {
-        let result : Posting = new Posting();
+    public intersection(toPosting : Posting<T>) : Posting<T> {
+        let result : Posting<T> = new Posting<T>();
 
         let toIndex : number = 0;
         let thisIndex : number = 0;
@@ -94,8 +94,8 @@ export default class Posting {
         return result;
     }
 
-    public difference(toPosting : Posting) : Posting {
-        let result : Posting = new Posting();
+    public difference(toPosting : Posting<T>) : Posting<T> {
+        let result : Posting<T> = new Posting();
 
         let toIndex : number = 0;
         let thisIndex : number = 0;

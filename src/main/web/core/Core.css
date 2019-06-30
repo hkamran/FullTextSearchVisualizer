@@ -2,6 +2,12 @@ body {
     margin: 20px;
 }
 
+#searchInput {
+    margin: 10px;
+    padding: 5px;
+    border: 1px solid black;
+}
+
 .posting {
     margin: 5px;
     border: 1px solid #000;
@@ -56,4 +62,33 @@ body {
 .box {
     min-height: 50px;
     margin-bottom: 20px;
+}
+
+.react-tabs {
+    padding: 10px;
+}
+
+.react-tabs__tab--selected {
+    border: 1px solid black;
+    border-bottom-color: black;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-radius: 0px;
+    border-bottom: 0px;
+}
+
+.react-tabs__tab-panel {
+    padding: 20px;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    padding-top: 30px;
+}
+
+.react-tabs__tab-list {
+    border-bottom: 1px solid black;
+}
+
+.react-tabs__tab-list {
+    margin: 0px;
 }

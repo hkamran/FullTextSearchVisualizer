@@ -11,7 +11,7 @@ export default class Index {
 
     public deleted : Set<number> = new Set<number>();
     public documents : Document[] = [] as any;
-    public postings : Map<string, Posting> = new Map<string, Posting>();
+    public postings : Map<string, Posting<number>> = new Map<string, Posting<number>>();
     public tokens : string[] = [] as any;
 
     public search(query : string) : SearchResult {
@@ -44,7 +44,7 @@ export default class Index {
         tokens.sort();
         for (let id in tokens) {
             let token = tokens[id];
-            let posting : Posting = new Posting();
+            let posting : Posting<number> = new Posting<number>();
             posting.push(docIndex);
             index.postings.set(token, posting);
         }
@@ -82,23 +82,35 @@ export default class Index {
         // merge postings Worst O(2n + 2m)
         for (let id in tokens) {
             let token = tokens[id];
-            let postingA : Posting = a.postings.get(token);
-            let postingB : Posting = b.postings.get(token);
+            let postingA : Posting<number> = a.postings.get(token);
+            let postingB : Posting<number> = b.postings.get(token);
 
             if (postingA) { // O(n)
                 postingA = postingA.clone();
-                postingA.remove(a.deleted);
+                postingA.filter((element) => {
+                    if (a.deleted.has(element)) {
+                        return true;
+                    }
+                    return false;
+                });
             }
 
             if (postingB) { // O(m)
                 postingB = postingB.clone();
-                postingB.remove(b.deleted);
-                postingB.increment(docSize);
+                postingB.filter((element) => {
+                    if (b.deleted.has(element)) {
+                        return true;
+                    }
+                    return false;
+                });
+                postingB.apply((element) => {
+                    return element + docSize;
+                });
             }
 
-            let result : Posting = new Posting();
+            let result : Posting<number> = new Posting<number>();
             if (postingA != null && postingB != null) {
-                result = Posting.merge(postingA, postingB); // O(m + n)
+                result = postingA.merge(postingB); // O(m + n)
             } else if (postingA != null) {
                 result = postingA;
             } else if (postingB != null) {
@@ -112,7 +124,7 @@ export default class Index {
 
         for (let i = 0; i < tokens.length; i++) {
             let token : string = tokens[i];
-            let posting : Posting = index.postings.get(token);
+            let posting : Posting<number> = index.postings.get(token);
             if (posting != null && posting.size() > 0) {
                 index.tokens.push(token);
             }

@@ -5,6 +5,9 @@ import CoreStoreActions from './../core/stores/core/CoreStoreActions';
 import Document from './../../app/beans/Document';
 import {Log, Level} from 'typescript-logger/build/index';
 import Posting from './../../app/Posting';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+
+import 'react-tabs/style/react-tabs.css';
 
 export default class IndexScene extends React.Component<any, any> {
 
@@ -43,7 +46,8 @@ export default class IndexScene extends React.Component<any, any> {
     public render() {
         let tokens = [] as any;
         this.state.index.tokens.forEach((value, key) => {
-            let posting : Posting = this.state.index.postings.get(value);
+            let posting : Posting<number> = this.state.index.postings.get(value);
+            console.log(value);
             let docIds = posting != null ? posting.docList : [];
 
             let docElement = [];
@@ -73,13 +77,21 @@ export default class IndexScene extends React.Component<any, any> {
         });
         return (
             <div className='box'>
-                <fieldset>
-                <legend>Index</legend>
-                <div className='menu'>
-                    <button onClick={this.rebuildIndex}>rebuild</button>
-                </div>
-                {tokens}
-                </fieldset>
+                <Tabs>
+                    <TabList>
+                        <Tab>Token Index</Tab>
+                        <Tab>Wildcard Index</Tab>
+                    </TabList>
+
+                    <TabPanel>
+                        <div className='menu'>
+                            <button onClick={this.rebuildIndex}>rebuild</button>
+                        </div>
+                        {tokens}
+                    </TabPanel>
+                    <TabPanel>
+                    </TabPanel>
+                </Tabs>
             </div>
         );
     }

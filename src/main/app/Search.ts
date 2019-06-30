@@ -10,14 +10,14 @@ export class Search {
 
         let tokens : string[] = tokenizer.tokenize(query);
 
-        let postings : Posting[] = [] as any;
+        let postings : Array<Posting<number>> = [] as any;
         tokens.forEach((token) => {
-            let posting : Posting  = index.postings.get(token);
+            let posting : Posting<number>  = index.postings.get(token);
             postings.push(posting);
             result.details.tokens.add(token);
         });
 
-        let matched : Posting = null;
+        let matched : Posting<number> = null;
         for (let posting of postings) {
             if (matched === null) {
                 matched = posting;
