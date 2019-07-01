@@ -14,10 +14,6 @@ export default class Index {
     public postings : Map<string, Posting<number>> = new Map<string, Posting<number>>();
     public tokens : string[] = [] as any;
 
-    public search(query : string) : SearchResult {
-        return Search.query(this, query);
-    }
-
     public delete(docId : number) {
         this.deleted.add(docId);
     }

@@ -5,8 +5,8 @@ import {Log, Level} from 'typescript-logger/build/index';
 import Document from './../../../../app/beans/Document';
 import CoreStoreActions, {Types} from './CoreStoreActions';
 import Index from './../../../../app/Index';
-import {SearchResult} from './../../../../app/Search';
 import BigramIndex from '../../../../app/BigramIndex';
+import {Search, SearchResult} from '../../../../app/Search';
 
 class CoreStore extends Event {
 
@@ -54,7 +54,7 @@ class CoreStore extends Event {
     }
 
     public search(query : string) : void {
-        let result : SearchResult = this.index.search(query);
+        let result : SearchResult = Search.query(this.index, this.bigramIndex, query);
         this.result = result;
         this.log.info('setSearchResult', result);
         this.emit('change');

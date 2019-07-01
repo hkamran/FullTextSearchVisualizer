@@ -1,17 +1,17 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import CoreStore from './../core/stores/core/CoreStore';
-import CoreStoreActions from './../core/stores/core/CoreStoreActions';
-import Document from './../../app/beans/Document';
+import CoreStore from './core/stores/core/CoreStore';
+import CoreStoreActions from './core/stores/core/CoreStoreActions';
+import Document from '../app/beans/Document';
 import {Log, Level} from 'typescript-logger/build/index';
 import * as loremIpsum from 'lorem-ipsum';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import 'react-tabs/style/react-tabs.css';
 
-export default class DocumentScene extends React.Component<any, any> {
+export default class DocumentComponent extends React.Component<any, any> {
 
-    public log = Log.create('DocumentScene');
+    public log = Log.create('DocumentComponent');
 
     public state = {} as any;
 

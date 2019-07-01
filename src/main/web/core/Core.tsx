@@ -9,10 +9,9 @@ import Header from './layout/Header';
 import Navigation from './layout/Navigation';
 import CoreStore from './stores/core/CoreStore';
 
-import HomeScene from '../home/HomeScene';
-import DocumentScene from '../document/DocumentScene';
-import IndexScene from '../index/IndexScene';
-import SearchScene from '../search/SearchScene';
+import DocumentScene from '../DocumentComponent';
+import IndexScene from '../IndexComponent';
+import SearchScene from '../SearchComponent';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import './Core.css';
