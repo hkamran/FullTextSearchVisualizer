@@ -88,17 +88,27 @@ export default class IndexComponent extends React.Component<any, any> {
         this.state.ngram.tokens.forEach((value, key) => {
             let posting : Posting<string> = this.state.ngram.postings.get(value);
             let words = posting != null ? posting.docList : [];
+            let highlight = '';
 
             let elements = [] as any;
             for (let id in words) {
                 let word = words[id];
-                elements.push(<span className='posting'>{word}</span>);
+                if (this.state.result.details.tokens.has(word)
+                    && this.state.result.details.wildCardsTokens.has(value)) {
+                    highlight = '  highlight';
+                }
+                elements.push(<span className={'posting' + highlight}>{word}</span>);
+            }
+
+            highlight = '';
+            if (this.state.result.details.wildCardsTokens.has(value)) {
+                highlight = '  highlight';
             }
 
             ngrams.push(
                 <div className='search-row' key={key}>
                     <span>
-                        <span className='token'>{value}</span>
+                        <span className={'token' + highlight}>{value}</span>
                         <span>-></span>
                         {elements}
                     </span>

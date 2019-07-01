@@ -9,21 +9,52 @@ export class Search {
         let tokenizer : Tokenizer = new Tokenizer();
         let result : SearchResult = new SearchResult();
 
-        let tokens : string[] = tokenizer.tokenize(query);
-        let wildcards : string[] = [] as any;
+        let wordTokens : string[] = tokenizer.tokenize(query, false);
+        let wildcardTokens : string[] = [] as any;
 
-        let postings : Array<Posting<number>> = [] as any;
-        tokens.forEach((token) => {
+        let wordPostings : Array<Posting<number>> = [] as any;
+        let wildCardPostings : Array<Posting<string>> = [] as any;
+
+        wordTokens.forEach((token) => {
             let posting : Posting<number>  = index.postings.get(token);
-            postings.push(posting);
-            result.details.tokens.add(token);
-
             if (token.indexOf('*') >= 0) {
-                wildcards.push(token);
+                wildcardTokens.push(...tokenizer.wildcard(token, 2));
+            } else if (posting != null) {
+                wordPostings.push(posting);
+                result.details.tokens.add(token);
             }
         });
 
-        let matched : Posting<number> = null;
+        let matched = this.matchWords(wordPostings);
+
+        wildcardTokens.forEach((token) => {
+            let wildCardPosting : Posting<string> = bigramIndex.postings.get(token);
+            if (wildCardPosting != null) {
+                wildCardPostings.push(wildCardPosting);
+            } else {
+                console.log(token + ' null');
+                wildCardPostings.push(new Posting<string>());
+            }
+            result.details.wildCardsTokens.add(token);
+        });
+
+        let wildCardMatched = this.matchWords(wildCardPostings);
+        wildCardMatched.docList.forEach((token) => {
+            let posting : Posting<number>  = index.postings.get(token);
+            if (posting != null) {
+                wordPostings.push(posting);
+                result.details.tokens.add(token);
+                matched = matched.or(posting);
+            }
+        });
+
+        result.matched = matched.docList;
+        result.query = query;
+        return result;
+    }
+
+    private static matchWords(postings: Array<Posting<any>>) {
+        let matched: Posting<any> = null;
         for (let posting of postings) {
             if (matched === null) {
                 matched = posting;
@@ -35,12 +66,8 @@ export class Search {
         if (matched == null) {
             matched = new Posting();
         }
-
-        result.matched = matched.docList;
-        result.query = query;
-        return result;
+        return matched;
     }
-
 }
 
 export class SearchResult {
@@ -49,8 +76,10 @@ export class SearchResult {
     public details : {
         comparisons : number,
         tokens : Set<string>,
+        wildCardsTokens : Set<string>,
     } = {
         comparisons : 0,
         tokens : new Set<string>(),
+        wildCardsTokens : new Set<string>(),
     };
 }

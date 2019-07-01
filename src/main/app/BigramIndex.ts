@@ -101,6 +101,7 @@ export default class BigramIndex {
             }
 
             if (result.size() > 0) {
+                result.docList.sort();
                 index.postings.set(token, result);
             }
         }

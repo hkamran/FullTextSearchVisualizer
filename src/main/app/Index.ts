@@ -32,7 +32,7 @@ export default class Index {
     }
 
     public static create(document : Document) : Index {
-        let tokens: string[]  = this.tokenizer.tokenize(document.content);
+        let tokens: string[]  = this.tokenizer.tokenize(document.content, true);
         let index : Index = new Index();
 
         let docIndex = index.documents.length;
