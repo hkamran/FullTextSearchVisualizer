@@ -9,17 +9,18 @@ export class Search {
         let tokenizer : Tokenizer = new Tokenizer();
         let result : SearchResult = new SearchResult();
 
-        let wordTokens : string[] = tokenizer.tokenize(query, false);
+        let wordTokens : string[] = [] as any;
         let wildcardTokens : string[] = [] as any;
 
         let wordPostings : Array<Posting<number>> = [] as any;
         let wildCardPostings : Array<Posting<string>> = [] as any;
 
-        wordTokens.forEach((token) => {
+        tokenizer.tokenize(query, false).forEach((token) => {
             let posting : Posting<number>  = index.postings.get(token);
             if (token.indexOf('*') >= 0) {
                 wildcardTokens.push(...tokenizer.wildcard(token, 2));
             } else if (posting != null) {
+                wordTokens.push(token);
                 wordPostings.push(posting);
                 result.details.tokens.add(token);
             }
@@ -32,7 +33,6 @@ export class Search {
             if (wildCardPosting != null) {
                 wildCardPostings.push(wildCardPosting);
             } else {
-                console.log(token + ' null');
                 wildCardPostings.push(new Posting<string>());
             }
             result.details.wildCardsTokens.add(token);
