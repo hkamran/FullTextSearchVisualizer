@@ -6,11 +6,13 @@ import Document from './../../../../app/beans/Document';
 import CoreStoreActions, {Types} from './CoreStoreActions';
 import Index from './../../../../app/Index';
 import {SearchResult} from './../../../../app/Search';
+import BigramIndex from '../../../../app/BigramIndex';
 
 class CoreStore extends Event {
 
     public log = Log.create('CoreStore');
     public index : Index = new Index();
+    public bigramIndex : BigramIndex = new BigramIndex();
     public result : SearchResult = new SearchResult();
 
     constructor() {
@@ -28,6 +30,7 @@ class CoreStore extends Event {
     public addDocument(content : string) {
         let doc : Document = Document.build(content);
         this.index = Index.merge(this.index, Index.create(doc));
+        this.bigramIndex = BigramIndex.merge(this.bigramIndex, BigramIndex.create(doc));
         this.log.info('handleAction', 'Added doc ' + doc.id);
         this.emit('change');
     }
@@ -44,6 +47,10 @@ class CoreStore extends Event {
 
     public getIndex() : Index {
         return this.index;
+    }
+
+    public getBigramIndex() : BigramIndex {
+        return this.bigramIndex;
     }
 
     public search(query : string) : void {

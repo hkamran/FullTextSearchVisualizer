@@ -87,7 +87,7 @@ export default class Index {
 
             if (postingA) { // O(n)
                 postingA = postingA.clone();
-                postingA.filter((element) => {
+                postingA.remove((element) => {
                     if (a.deleted.has(element)) {
                         return true;
                     }
@@ -97,7 +97,7 @@ export default class Index {
 
             if (postingB) { // O(m)
                 postingB = postingB.clone();
-                postingB.filter((element) => {
+                postingB.remove((element) => {
                     if (b.deleted.has(element)) {
                         return true;
                     }
@@ -110,7 +110,10 @@ export default class Index {
 
             let result : Posting<number> = new Posting<number>();
             if (postingA != null && postingB != null) {
-                result = postingA.merge(postingB); // O(m + n)
+                result = postingA.merge(postingB, true, (aNum, bNum) => {
+                    let diff : number = Number(aNum) - Number(bNum);
+                    return Number(diff);
+                });
             } else if (postingA != null) {
                 result = postingA;
             } else if (postingB != null) {

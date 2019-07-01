@@ -18,6 +18,22 @@ export default class Tokenizer {
             }
         });
 
+        return tokens;
+    }
+
+    public ngram(word : string, size : number) {
+        let tokens : string[] = [] as any;
+
+        if (word == null || word.length === 0) {
+            return tokens;
+        }
+
+        let terminatedToken = '$' + word + '$';
+
+        for (let i = 0; i < terminatedToken.length; i++) {
+            let sub = terminatedToken.substring(i, i + size);
+            tokens.push(sub);
+        }
 
         return tokens;
     }

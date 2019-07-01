@@ -23,7 +23,7 @@ export default class Posting<T> {
         }
     }
 
-    public filter(filter : (x: any) => boolean) : void {
+    public remove(filter : (x: any) => boolean) : void {
         let newDocList = [] as any;
 
         let j = 0;
@@ -48,6 +48,21 @@ export default class Posting<T> {
         this.docList = newDocList;
     }
 
+    public filter(filter : (x: any) => boolean) : void {
+        let newDocList = [] as any;
+
+        let i = 0;
+        while (i < this.docList.length) {
+            let element : any = this.docList[i];
+
+            if (!filter(element)) {
+                newDocList.push(element);
+            }
+            i++;
+        }
+        this.docList = newDocList;
+    }
+
     public clone() : Posting<T> {
         let docIds = [] as any;
         for (let i in this.docList) {
@@ -59,12 +74,9 @@ export default class Posting<T> {
         return posting;
     }
 
-    public merge(segment : Posting<T>) : Posting<T> {
+    public merge(segment : Posting<T>, includeDups : boolean, comparator : (a, b) => number) : Posting<T> {
         let result = new Posting<T>();
-        let docList = ArraysUtil.merge(this.docList, segment.docList, true, (aNum, bNum) => {
-            let diff : number = Number(aNum) - Number(bNum);
-            return Number(diff);
-        });
+        let docList = ArraysUtil.merge(this.docList, segment.docList, includeDups, comparator);
         result.docList = docList;
         return result;
     }

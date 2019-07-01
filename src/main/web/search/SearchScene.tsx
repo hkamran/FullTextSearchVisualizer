@@ -50,9 +50,8 @@ export default class SearchScene extends React.Component<any, any> {
 
     public render() {
         return (
-            <div className='box'>
+            <div className='box' style={{marginTop: '10px'}}>
                 <fieldset style={{padding: '0px', border: '0px'}}>
-                    <legend style={{marginBottom: '10px'}}>Search</legend>
                     <input id='searchInput' type='text' ref={this.searchInput} placeholder='Search'/>
                     <button type='button'
                             onClick={this.search.bind(this)}>search</button>

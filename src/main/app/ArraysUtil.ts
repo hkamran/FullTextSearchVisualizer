@@ -2,7 +2,7 @@ export default class ArraysUtil {
 
     public static merge<T>(aList : T[],
                            bList : T[],
-                           dups : boolean,
+                           includeDups : boolean,
                            comparator : (a : T, b : T) => number) : T[] {
 
         let aIndex = 0;
@@ -25,7 +25,7 @@ export default class ArraysUtil {
                 result.push(aElement);
                 aIndex++;
             } else {
-                if (dups) {
+                if (includeDups) {
                     result.push(aElement);
                     result.push(bElement);
                 } else {

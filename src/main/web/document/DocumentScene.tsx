@@ -75,12 +75,12 @@ export default class DocumentScene extends React.Component<any, any> {
                 <Tabs>
                     <TabList>
                         <Tab>Documents</Tab>
-                    </TabList>
-
-                    <TabPanel>
                         <div className='menu'>
                             <button onClick={this.addDocument.bind(this)}>generate</button>
                         </div>
+                    </TabList>
+
+                    <TabPanel>
                         {documents}
                     </TabPanel>
                 </Tabs>

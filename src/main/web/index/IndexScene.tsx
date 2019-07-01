@@ -20,6 +20,7 @@ export default class IndexScene extends React.Component<any, any> {
 
         this.state = {
             index : CoreStore.getIndex(),
+            ngram : CoreStore.getBigramIndex(),
             result : CoreStore.getSearchResult(),
         };
     }
@@ -35,6 +36,7 @@ export default class IndexScene extends React.Component<any, any> {
     public onChangeListener() {
         this.setState({
             index : CoreStore.getIndex(),
+            ngram : CoreStore.getBigramIndex(),
             result : CoreStore.getSearchResult(),
         });
     }
@@ -47,7 +49,6 @@ export default class IndexScene extends React.Component<any, any> {
         let tokens = [] as any;
         this.state.index.tokens.forEach((value, key) => {
             let posting : Posting<number> = this.state.index.postings.get(value);
-            console.log(value);
             let docIds = posting != null ? posting.docList : [];
 
             let docElement = [];
@@ -70,26 +71,56 @@ export default class IndexScene extends React.Component<any, any> {
                     docElement.push(<span className='posting'>{Number(docId).toString()}</span>);
                 }
 
-                tokens.push(<div className='search-row' key={key}>
-                    <span className='token'>{value}</span> -> <span>{docElement}</span>
-                </div>);
+                tokens.push(
+                    <div className='search-row' key={key}>
+                        <span>
+                            <span className='token'>{value}</span>
+                            <span>-></span>
+                            {docElement}
+                        </span>
+                    </div>);
+
             }
         });
+
+        let ngrams = [] as any;
+
+        this.state.ngram.tokens.forEach((value, key) => {
+            let posting : Posting<string> = this.state.ngram.postings.get(value);
+            let words = posting != null ? posting.docList : [];
+
+            let elements = [] as any;
+            for (let id in words) {
+                let word = words[id];
+                elements.push(<span className='posting'>{word}</span>);
+            }
+
+            ngrams.push(
+                <div className='search-row' key={key}>
+                    <span>
+                        <span className='token'>{value}</span>
+                        <span>-></span>
+                        {elements}
+                    </span>
+                </div>);
+        });
+
         return (
             <div className='box'>
                 <Tabs>
                     <TabList>
                         <Tab>Token Index</Tab>
                         <Tab>Wildcard Index</Tab>
-                    </TabList>
-
-                    <TabPanel>
                         <div className='menu'>
                             <button onClick={this.rebuildIndex}>rebuild</button>
                         </div>
+                    </TabList>
+
+                    <TabPanel>
                         {tokens}
                     </TabPanel>
                     <TabPanel>
+                        {ngrams}
                     </TabPanel>
                 </Tabs>
             </div>

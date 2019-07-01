@@ -52,11 +52,14 @@ body {
 .box .menu {
     float: right;
     margin-bottom: 15px;
-    margin-top: -45px;
+    margin-top: -30px;
     border: 1px solid #000;
     padding: 7px;
     border-radius: 2px;
     background: #fff;
+    position: relative;
+    top: 40px;
+    right: 20px;
 }
 
 .box {
@@ -83,6 +86,7 @@ body {
     border-right: 1px solid black;
     border-bottom: 1px solid black;
     padding-top: 30px;
+    overflow: auto;
 }
 
 .react-tabs__tab-list {
@@ -91,4 +95,8 @@ body {
 
 .react-tabs__tab-list {
     margin: 0px;
+}
+
+.search-row span {
+    white-space: nowrap;
 }
