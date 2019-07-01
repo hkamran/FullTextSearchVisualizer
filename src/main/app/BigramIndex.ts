@@ -22,7 +22,7 @@ export default class BigramIndex {
     }
 
     public static create(document : Document) : BigramIndex {
-        let tokens: string[]  = this.tokenizer.tokenize(document.content);
+        let tokens: string[]  = this.tokenizer.tokenize(document.content, true);
         let index : BigramIndex = new BigramIndex();
 
         let visitedNgrams : Set<string> = new Set<string>();

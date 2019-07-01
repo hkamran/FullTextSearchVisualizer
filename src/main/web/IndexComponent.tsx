@@ -62,9 +62,12 @@ export default class IndexComponent extends React.Component<any, any> {
                     }
                 }
 
-                tokens.push(<div className='search-row' key={key}>
-                    <span className='token highlight'>{value}</span> -> {docElement}
-                </div>);
+                tokens.push(
+                    <div className='search-row' key={key}>
+                        <span className='token highlight'>{value}</span>
+                        <span>-></span>
+                        {docElement}
+                    </div>);
             } else {
                 for (let id in docIds) {
                     let docId = docIds[id];

@@ -11,7 +11,7 @@ export default class Header extends React.Component<any, any> {
     public render() {
         return (
             <div>
-                <h3 style={{marginBottom: '5px'}}>Text Search Visualization </h3>
+                <h3 style={{marginBottom: '5px'}}>Full Text Search Visualization </h3>
                 <h3 style={{margin: '0px'}}><small style={{marginLeft: '5px'}}> Author: Hooman Kamran</small></h3>
             </div>
         );

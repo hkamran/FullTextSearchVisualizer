@@ -106,27 +106,6 @@ export default class Posting<T> {
         return result;
     }
 
-    public or(toPosting: Posting<T>) : Posting<T> {
-        let result : Posting<T> = new Posting();
-
-        let toIndex : number = 0;
-        let thisIndex : number = 0;
-
-        while (toIndex < toPosting.size()) {
-            let toId = toPosting.docList[toIndex];
-            result.push(toId);
-            toIndex++;
-        }
-
-        while (thisIndex < this.size()) {
-            let thisId = this.docList[thisIndex];
-            result.push(thisId);
-            thisIndex++;
-        }
-
-        return result;
-    }
-
     public difference(toPosting : Posting<T>) : Posting<T> {
         let result : Posting<T> = new Posting();
 
