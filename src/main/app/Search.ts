@@ -10,15 +10,16 @@ export class Search {
         let result : SearchResult = new SearchResult();
 
         let wordTokens : string[] = [] as any;
-        let wildCardTokens : string[] = [] as any;
+        let wildCardTokens : string[][] = [] as any;
 
         let wordPostings : Array<Posting<number>> = [] as any;
 
         tokenizer.tokenize(query, false).forEach((token) => {
             let posting : Posting<number>  = index.postings.get(token);
             if (token.indexOf('*') >= 0) {
-                wildCardTokens.push(...tokenizer.wildcard(token, 2));
-                wildCardTokens.forEach((value) => {
+                let tokens = tokenizer.wildcard(token, 2);
+                wildCardTokens.push(tokens);
+                tokens.forEach((value) => {
                    result.details.wildCardsTokens.add(value);
                 });
             } else if (posting != null) {
@@ -29,19 +30,30 @@ export class Search {
         });
 
         let wordPosting = this.intersectPostings(wordPostings);
-        let wildCardPosting = this.processWildCardQuery(wildCardTokens, bigramIndex, index);
-        let wildCardWordPosting = this.convertWildCardPostingToWordPosting(wildCardPosting, index);
+        let resultOfWildCardWordPosting : Posting<number> = null;
+
+        for (let i = 0; i < wildCardTokens.length; i++) {
+            let wildCardToken = wildCardTokens[i];
+            let wildCardPosting = this.processWildCardQuery(wildCardToken, bigramIndex, index);
+            let wildCardWordPosting = this.convertWildCardPostingToWordPosting(wildCardPosting, index);
+
+            wildCardPosting.docList.forEach((word) => {
+                result.details.tokens.add(word);
+            });
+
+            if (resultOfWildCardWordPosting == null) {
+                resultOfWildCardWordPosting = wildCardWordPosting;
+            } else {
+                resultOfWildCardWordPosting = resultOfWildCardWordPosting.intersection(wildCardWordPosting);
+            }
+        }
 
         let matched = new Posting<number>();
         if (wordTokens.length === 0) {
-            matched = wildCardWordPosting;
-        } else if (wildCardWordPosting != null) {
-            matched = wordPosting.intersection(wildCardWordPosting);
+            matched = resultOfWildCardWordPosting;
+        } else if (resultOfWildCardWordPosting != null) {
+            matched = wordPosting.intersection(resultOfWildCardWordPosting);
         }
-
-        wildCardPosting.docList.forEach((word) => {
-            result.details.tokens.add(word);
-        });
 
         result.matched = matched.docList;
         result.query = query;
