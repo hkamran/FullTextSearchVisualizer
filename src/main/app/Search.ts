@@ -49,10 +49,12 @@ export class Search {
         }
 
         let matched = new Posting<number>();
-        if (wordTokens.length === 0) {
+        if (wordTokens.length === 0) { // wildcards only
             matched = resultOfWildCardWordPosting;
-        } else if (resultOfWildCardWordPosting != null) {
+        } else if (resultOfWildCardWordPosting != null) { // mix
             matched = wordPosting.intersection(resultOfWildCardWordPosting);
+        } else { // no wildcards
+            matched = wordPosting;
         }
 
         result.matched = matched.docList;
